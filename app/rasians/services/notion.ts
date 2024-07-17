@@ -8,10 +8,20 @@ export async function getMembers(searchTerm: string = '') {
   
     const filter = searchTerm
       ? {
-            property: 'Name',
-            title: {
-                contains: searchTerm,
-            },
+            or: [
+                {
+                    property: 'Name',
+                    title: {
+                        contains: searchTerm,
+                    }
+                },
+                {
+                    property: 'Email',
+                    email: {
+                        contains: searchTerm,
+                    }
+                }
+            ]
         }
       : undefined;
   
@@ -27,5 +37,33 @@ export async function getMembers(searchTerm: string = '') {
     } catch (error) {
         console.error('Failed to fetch members:', error);
         throw new Error('Failed to fetch members');
+    }
+}
+
+// Update member function
+export async function updateMember(memberId: string, name: string): Promise<void> {
+    try {
+        // Make API call to update member
+        await notion.pages.update({
+            page_id: memberId,
+            properties: {
+                // Update the properties of the member
+                // For example:
+                Name: {
+                    title: [
+                        {
+                            text: {
+                                content: name,
+                            },
+                        },
+                    ],
+                }
+                // Add more properties as needed
+            },
+        });
+
+        console.log('Member updated successfully!');
+    } catch (error) {
+        console.error('Error updating member:', error);
     }
 }

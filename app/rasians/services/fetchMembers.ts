@@ -2,7 +2,7 @@ import axios from 'axios';
 import simplifyData from './simplifyData';
 
 async function fetchMembers(searchTerm: string): Promise<any> {
-    const url = `rasians/api?search=${searchTerm}`;
+    const url = `/rasians/api?search=${searchTerm}`;
 
     try {
         const response = await axios.get(url);

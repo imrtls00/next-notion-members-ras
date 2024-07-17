@@ -26,7 +26,7 @@ const SearchMembers = () => {
             <input
                 type="text"
                 placeholder="Search..."
-                className="mb-6 p-2 bg-slate-700 border rounded w-full"
+                className="mb-6 border block w-full p-4 ps-10 text-sm text-gray-900 border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 value={searchTerm}
                 onChange={handleSearchInput}
             />
