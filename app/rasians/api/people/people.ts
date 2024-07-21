@@ -6,18 +6,20 @@ async function searchDirectoryPeople(query: string): Promise<void> {
     // Get API key from config
     const apiKey = process.env.GOOGLE_API_KEY;
     // Get access token from local storage
-    const accessToken = localStorage.getItem("access_token");
+    const accessToken = localStorage.getItem("access_token"); // instead of using localstorage, lets store the access token to ENV file instead?
     // Define the API endpoint
     const endpoint = `https://people.googleapis.com/v1/people:searchDirectoryPeople`;
 
     // Set up query parameters
-    const params = new URLSearchParams({
-        pageSize: '10',
-        query,
-        readMask: 'emailAddresses,coverPhotos,names,photos,urls,phoneNumbers,genders',
-        sources: 'DIRECTORY_SOURCE_TYPE_DOMAIN_PROFILE',
-        key: apiKey
-    });
+    const params = new URLSearchParams(
+        {
+            pageSize: '10',
+            query,
+            readMask: 'emailAddresses,coverPhotos,names,photos,urls,phoneNumbers,genders',
+            sources: 'DIRECTORY_SOURCE_TYPE_DOMAIN_PROFILE',
+            key: apiKey
+        }
+    );
 
     // Construct the URL with parameters
     const url = `${endpoint}?${params.toString()}`;
@@ -39,16 +41,17 @@ async function searchDirectoryPeople(query: string): Promise<void> {
 
         // Parse the response JSON
         const data = await response.json();
-        // Update the result content in the DOM
-        document.getElementById('result')!.textContent = JSON.stringify(data, null, 2);
+        // Getting the data (we can return this as well)
+        console.log( JSON.stringify(data) );
+
     } catch (error) {
         // Handle errors
         console.error('Error fetching data:', error);
-        document.getElementById('result')!.textContent = `Error: ${error.message}`;
     }
 }
 
 // Function to generate a cryptographically random state
+// why do we need this?
 function generateCryptoRandomState(): string {
     return btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(16))));
 }
@@ -62,7 +65,7 @@ function oauth2SignIn(): void {
 
     const params = {
         'client_id': process.env.GOOGLE_CLIENT_ID,
-        'redirect_uri': process.env.REDIRECT_URI,
+        'redirect_uri': process.env.REDIRECT_URI, //might need to change this?
         'scope': 'https://www.googleapis.com/auth/directory.readonly',
         'state': state,
         'include_granted_scopes': 'true',
